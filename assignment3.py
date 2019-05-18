@@ -63,8 +63,8 @@ class Preprocessor:
         tokens = self.to_lower_case(tokens)
         tokens = self.remove_stopwords(tokens)
 
-        # note: remove duplicates
-        return list(set(tokens))
+        # note: remove duplicates and tokens with length of 1
+        return list(set([token for token in tokens if len(token) > 1]))
 
     def remove_stopwords(self, tokens: Iterable[str]) -> List[str]:
         return [token for token in tokens if token not in self.stop_words]
@@ -141,5 +141,11 @@ class BetterThanGoogle:
 
 
 if __name__ == '__main__':
+    import time
+
+    start = time.time()
     google = BetterThanGoogle('data/')
     google.create_index()
+    end = time.time()
+
+    print('Indexing time: ', end - start)
