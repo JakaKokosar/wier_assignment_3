@@ -6,16 +6,22 @@ import sqlite3
 from pathlib import Path
 from typing import List, Iterable, Dict, Optional
 from html2text import HTML2Text
+from nltk.corpus import stopwords
 
 # nltk.download('punkt')
+# nltk.download('stopwords')
 
 logging.getLogger().setLevel(logging.INFO)
-
 
 class DBHandler:
     db_file_name = 'inverted-index.db'
 
     def __init__(self):
+        import os
+        try:
+            os.remove(self.db_file_name)
+        except FileNotFoundError:
+            pass
         self.connection = sqlite3.connect(self.db_file_name)
         self.create_table()
 
@@ -78,8 +84,10 @@ class Preprocessor:
 
     @staticmethod
     def load_stopwords(stopwords_path='slovenian-stopwords.txt'):
+        english = set(stopwords.words('english'))
         with open(stopwords_path, 'r') as fp:
-            return set([line.strip() for line in fp.readlines()])
+            slovenian = set([line.strip() for line in fp.readlines()])
+            return english.union(slovenian)
 
     @staticmethod
     def remove_punctuation(raw_text: str):
@@ -121,6 +129,8 @@ class BetterThanGoogle:
             parser.ignore_links = True
             return parser.handle(html)
 
+        # for path in Path(self.corpus_dir_path).glob('**/*.html'):
+        #     return {str(path): text(path.read_text())}
         return {str(path): text(path.read_text()) for path in Path(self.corpus_dir_path).glob('**/*.html')}
 
     @staticmethod
