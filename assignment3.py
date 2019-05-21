@@ -2,6 +2,7 @@ import re
 import nltk
 import logging
 import sqlite3
+import os
 
 from pathlib import Path
 from typing import List, Iterable, Dict, Optional
@@ -17,13 +18,7 @@ class DBHandler:
     db_file_name = 'inverted-index.db'
 
     def __init__(self):
-        import os
-        try:
-            os.remove(self.db_file_name)
-        except FileNotFoundError:
-            pass
         self.connection = sqlite3.connect(self.db_file_name)
-        self.create_table()
 
     def __del__(self):
         """ this is called when an object is garbage collected """
@@ -45,6 +40,12 @@ class DBHandler:
         cursor.close()
 
         self.connection.commit()
+
+    def perform_query(self, query):
+        cursor = self.connection.cursor()
+        cursor.execute(query)
+        rows = cursor.fetchall()
+        return rows
 
 
 class Preprocessor:
@@ -70,7 +71,7 @@ class Preprocessor:
         tokens = self.remove_stopwords(tokens)
 
         # note: remove duplicates and tokens with length of 1
-        return list(set([token for token in tokens if len(token) > 1]))
+        return set(token for token in tokens if len(token) > 1)
 
     def remove_stopwords(self, tokens: Iterable[str]) -> List[str]:
         return [token for token in tokens if token not in self.stop_words]
@@ -138,6 +139,7 @@ class BetterThanGoogle:
         return [str(match.start()) for match in re.finditer(word, content)]
 
     def create_index(self, preprocessor=Preprocessor(), db=DBHandler()):
+        db.create_table()
         progress_counter = 0
 
         for file_name, document in self.corpus.items():
@@ -149,13 +151,66 @@ class BetterThanGoogle:
                 if len(occurrences) > 0:
                     db.insert(token, file_name, len(occurrences), ','.join(occurrences))
 
+class SearchEngine:
 
-if __name__ == '__main__':
-    import time
+    def __init__(self, db_handler: DBHandler):
+        self.db = db_handler
+        self.parser = HTML2Text()
+        self.parser.ignore_links = True
 
+    def perform_query(self, query: str):
+        rows = self.db.perform_query("SELECT * FROM Posting WHERE word='%s'" % query)
+        results = []
+        for row in rows:
+            for result in self._find_occurrences_in_file(row[1], self._to_postings_list(row[3]), query):
+                results.append(result)
+        return results
+
+    def _to_postings_list(self, postings: str):
+        for i in postings.split(","):
+            yield int(i)
+
+    def _find_occurrences_in_file(self, file: str, postings_list: [int], token: str, surrounding_characters: int = 15):
+        text = self._load_file(file)
+        for index in postings_list:
+            min_index = max(0, index - surrounding_characters)
+            max_index = min(len(text) - 1, index + len(token) + surrounding_characters)
+            yield "... " + text[min_index: max_index] + " ..."
+
+    def _load_file(self, file):
+        # return Path(file).read_text()
+        text = self._text(Path(file).read_text())
+        return text
+
+    def _text(self, html: str) -> str:
+        # duplicate code ...
+        """ Extract all text found between HTML tags """
+        return self.parser.handle(html)
+
+
+def initiating_search(query: str):
+    start = time.time()
+    results = SearchEngine(DBHandler()).perform_query(query)
+    end = time.time()
+    print('Searching time: ', end - start)
+    print("Found %d results: " % len(results))
+    for idx, result in enumerate(results):
+        print("%d: %s" % (idx, result))
+
+
+def initiating_indexing():
     start = time.time()
     google = BetterThanGoogle('data/')
     google.create_index()
     end = time.time()
-
     print('Indexing time: ', end - start)
+
+
+if __name__ == '__main__':
+    import time
+
+    exists = os.path.isfile('inverted-index.db')
+    if exists:
+        initiating_search("trgovina")
+    else:
+        initiating_indexing()
