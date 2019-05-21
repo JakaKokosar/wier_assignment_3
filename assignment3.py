@@ -153,6 +153,18 @@ class BetterThanGoogle:
                     db.insert(token, file_name, len(occurrences), ','.join(occurrences))
 
 
+class QueryResults:
+    def __init__(self, query, results):
+        self.query = query
+        self.results = results
+
+
+class QueryResult:
+    def __init__(self, count, query_results):
+        self.count = count
+        self.query_results = query_results
+
+
 class SearchEngine:
 
     def __init__(self, db_handler: DBHandler):
@@ -162,13 +174,18 @@ class SearchEngine:
 
     def perform_query(self, query: str):
         query_words = query.lower().split(" ")
+        count = 0
         results = []
-        for query in query_words:
-            rows = self.db.perform_query("SELECT * FROM Posting WHERE word='%s'" % query)
+        for query_word in query_words:
+            query_results = []
+            rows = self.db.perform_query("SELECT * FROM Posting WHERE word='%s'" % query_word)
             for row in rows:
-                for result in self._find_occurrences_in_file(row[1], self._to_postings_list(row[3]), query):
-                    results.append(result)
-        return results
+                for result in self._find_occurrences_in_file(row[1], self._to_postings_list(row[3]), query_word):
+                    query_results.append(result)
+                    count += 1
+            results.append(QueryResults(query_word, query_results))
+        results.sort(key=lambda x: len(x.results), reverse=True)
+        return QueryResult(count, results)
 
     @staticmethod
     def _to_postings_list(postings: str):
@@ -188,13 +205,18 @@ class SearchEngine:
 
 
 def initiating_search(query: str):
+    engine = SearchEngine(DBHandler())
     start = time.time()
-    results = SearchEngine(DBHandler()).perform_query(query)
+    result = engine.perform_query(query)
     end = time.time()
     print('Searching time: ', end - start)
-    print("Found %d results for \"%s\": " % (len(results), query))
-    for idx, result in enumerate(results):
-        print("%d: %s" % (idx, repr(result)))
+    print("Found %d results for \"%s\"" % (result.count, query))
+    print()
+    for result_query in result.query_results:
+        print("Found %d results for \"%s\": " % (len(result_query.results), result_query.query))
+        for idx, result in enumerate(result_query.results):
+            print("%d: %s" % (idx, repr(result)))
+        print()
 
 
 def initiating_indexing():
@@ -208,7 +230,7 @@ def initiating_indexing():
 if __name__ == '__main__':
     exists = os.path.isfile('inverted-index.db')
     if exists:
-        for query in ["predelovalne dejavnosti", "trgovina", "social services"]:
+        for query in ["social services"]:
             initiating_search(query)
             print()
     else:
