@@ -179,7 +179,7 @@ class SearchEngine:
         text = self._load_file(file)
         for index in postings_list:
             min_index = max(0, index - surrounding_characters)
-            max_index = min(len(text) - 1, index + len(token) + surrounding_characters)
+            max_index = min(len(text), index + len(token) + surrounding_characters)
             yield "... " + text[min_index: max_index] + " ..."
 
     def _load_file(self, file):
