@@ -131,8 +131,6 @@ class BetterThanGoogle:
             parser.ignore_links = True
             return parser.handle(html)
 
-        # for path in Path(self.corpus_dir_path).glob('**/*.html'):
-        #     return {str(path): text(path.read_text())}
         return {str(path): text(path.read_text()) for path in Path(self.corpus_dir_path).glob('**/*.html')}
 
     @staticmethod
@@ -154,13 +152,13 @@ class BetterThanGoogle:
 
 
 class QueryResults:
-    def __init__(self, query, results):
+    def __init__(self, query: str, results: [str]):
         self.query = query
         self.results = results
 
 
 class QueryResult:
-    def __init__(self, count, query_results):
+    def __init__(self, count: int, query_results: [QueryResults]):
         self.count = count
         self.query_results = query_results
 
