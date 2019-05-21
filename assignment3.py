@@ -213,7 +213,7 @@ def initiating_search(query: str):
     for result_query in result.query_results:
         print("Found %d results for \"%s\": " % (len(result_query.results), result_query.query))
         for idx, result in enumerate(result_query.results):
-            print("%d: %s" % (idx, repr(result)))
+          print(f'{idx}: {repr(result)}')
         print()
 
 
