@@ -3,6 +3,7 @@ import nltk
 import logging
 import sqlite3
 import os
+import time
 
 from pathlib import Path
 from typing import List, Iterable, Dict, Optional
@@ -151,6 +152,7 @@ class BetterThanGoogle:
                 if len(occurrences) > 0:
                     db.insert(token, file_name, len(occurrences), ','.join(occurrences))
 
+
 class SearchEngine:
 
     def __init__(self, db_handler: DBHandler):
@@ -159,14 +161,17 @@ class SearchEngine:
         self.parser.ignore_links = True
 
     def perform_query(self, query: str):
-        rows = self.db.perform_query("SELECT * FROM Posting WHERE word='%s'" % query)
+        query_words = query.lower().split(" ")
         results = []
-        for row in rows:
-            for result in self._find_occurrences_in_file(row[1], self._to_postings_list(row[3]), query):
-                results.append(result)
+        for query in query_words:
+            rows = self.db.perform_query("SELECT * FROM Posting WHERE word='%s'" % query)
+            for row in rows:
+                for result in self._find_occurrences_in_file(row[1], self._to_postings_list(row[3]), query):
+                    results.append(result)
         return results
 
-    def _to_postings_list(self, postings: str):
+    @staticmethod
+    def _to_postings_list(postings: str):
         for i in postings.split(","):
             yield int(i)
 
@@ -178,13 +183,7 @@ class SearchEngine:
             yield "... " + text[min_index: max_index] + " ..."
 
     def _load_file(self, file):
-        # return Path(file).read_text()
-        text = self._text(Path(file).read_text())
-        return text
-
-    def _text(self, html: str) -> str:
-        # duplicate code ...
-        """ Extract all text found between HTML tags """
+        html = Path(file).read_text()
         return self.parser.handle(html)
 
 
@@ -193,9 +192,9 @@ def initiating_search(query: str):
     results = SearchEngine(DBHandler()).perform_query(query)
     end = time.time()
     print('Searching time: ', end - start)
-    print("Found %d results: " % len(results))
+    print("Found %d results for \"%s\": " % (len(results), query))
     for idx, result in enumerate(results):
-        print("%d: %s" % (idx, result))
+        print("%d: %s" % (idx, repr(result)))
 
 
 def initiating_indexing():
@@ -207,10 +206,10 @@ def initiating_indexing():
 
 
 if __name__ == '__main__':
-    import time
-
     exists = os.path.isfile('inverted-index.db')
     if exists:
-        initiating_search("trgovina")
+        for query in ["predelovalne dejavnosti", "trgovina", "social services"]:
+            initiating_search(query)
+            print()
     else:
         initiating_indexing()
