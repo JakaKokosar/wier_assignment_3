@@ -57,8 +57,22 @@ The article covers the work done in the scope of the third programming assignmen
 \end{abstract}
 
 \section{Introduction}
-After having 
+After having collected web pages in the first assignment and thoroughly stripped them down to the data we are interested in in the second we were ready to continue in the final step which is constructing a data index and implementing the function of querying.
 
+\section{Data Processing}
+Glavna funkcija \textit{preprocess} prejme kot argument niz \textit{raw\_text} in mu:
+\begin{itemize}
+\item S funkcijo \textit{remove\_punctuation} odstrani ločila in več
+\item Z \textit{nltk.tokenize.word\_tokenize} pretvori v vrsto besednih značk
+\item Odstrani se značke, ki niso alfabetične
+\item Vse velike začetnice se pretvorijo v male
+\item Odstrani se značke, ki so "stopword"
+\item S pomočjo pretvorbe v podatkovno strukturo množice se odstranijo duplikati
+\end{itemize} 
+Nato ta vrne seznam ostalih značk.
 
+\section{Indexing}
+
+\section{Data Retrieval}
 
 \end{document}
