@@ -4,6 +4,8 @@ import logging
 import sqlite3
 import os
 import time
+from collections import defaultdict
+from bs4 import BeautifulSoup
 
 from pathlib import Path
 from typing import List, Iterable, Dict, Optional
@@ -152,8 +154,8 @@ class BetterThanGoogle:
 
 
 class QueryResults:
-    def __init__(self, query: str, results: [str]):
-        self.query = query
+    def __init__(self, document: str, results: [str]):
+        self.document = document
         self.results = results
 
 
@@ -172,18 +174,23 @@ class SearchEngine:
 
     def perform_query(self, query: str):
         query_words = query.lower().split(" ")
+
+        retrieved_results = defaultdict(list)
         count = 0
-        results = []
+
         for query_word in query_words:
-            query_results = []
             rows = self.db.perform_query("SELECT * FROM Posting WHERE word='%s'" % query_word)
             for row in rows:
-                for result in self._find_occurrences_in_file(row[1], self._to_postings_list(row[3]), query_word):
-                    query_results.append(result)
+                document_name = row[1]
+                postings_list = self._to_postings_list(row[3])
+                for result in self._find_occurrences_in_file(row[1], postings_list, query_word):
+                    retrieved_results[document_name].append(result)
                     count += 1
-            results.append(QueryResults(query_word, query_results))
-        results.sort(key=lambda x: len(x.results), reverse=True)
-        return QueryResult(count, results)
+
+        query_results = [QueryResults(document_name, results)
+                         for document_name, results in retrieved_results.items()]
+        query_results.sort(key=lambda x: len(x.results), reverse=True)
+        return QueryResult(count, query_results)
 
     @staticmethod
     def _to_postings_list(postings: str):
@@ -211,7 +218,7 @@ def initiating_search(query: str):
     print("Found %d results for \"%s\"" % (result.count, query))
     print()
     for result_query in result.query_results:
-        print("Found %d results for \"%s\": " % (len(result_query.results), result_query.query))
+        print("Found %d results in \"%s\": " % (len(result_query.results), result_query.document))
         for idx, result in enumerate(result_query.results):
             print("%d: %s" % (idx, repr(result)))
         print()
@@ -228,7 +235,7 @@ def initiating_indexing():
 if __name__ == '__main__':
     exists = os.path.isfile('inverted-index.db')
     if exists:
-        for query in ["social services"]:
+        for query in ["sistem SPOT", "trgovina", "social services"]:
             initiating_search(query)
             print()
     else:
