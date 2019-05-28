@@ -98,11 +98,14 @@ class Preprocessor:
 
     @staticmethod
     def to_lower_case(tokens: Iterable[str]) -> List[str]:
-        return [token.lower() for token in tokens]
+        for token in tokens:
+            yield token.lower()
 
     @staticmethod
     def remove_non_alphabetic(tokens: Iterable[str]) -> List[str]:
-        return [token for token in tokens if token.isalpha()]
+        for token in tokens:
+            if token.isalpha():
+                yield token
 
 
 class BetterThanGoogle:
@@ -131,11 +134,23 @@ class BetterThanGoogle:
             parser.ignore_links = True
             return parser.handle(html)
 
-        return {str(path): text(path.read_text()) for path in Path(self.corpus_dir_path).glob('**/*.html')}
+        # for path in Path(self.corpus_dir_path).glob('**/*.html'):
+        #     return {str(path): text(path.read_text())}
+        return {str(path): text(path.read_text())
+                for path in Path(self.corpus_dir_path).glob('**/*.html')}
 
     @staticmethod
     def find_occurrences(word: str, content: str) -> List[str]:
-        return [str(match.start()) for match in re.finditer(word, content)]
+        occurrences = []
+        index = content.find(word)
+        while index != -1:
+            if index + 1 == len(content):
+                occurrences.append(word)
+                break
+            if not content[index + len(word) + 1].isalpha():
+                occurrences.append(str(index))
+            index = content.find(word, index + 1)
+        return occurrences
 
     def create_index(self, preprocessor=Preprocessor(), db=DBHandler()):
         db.create_table()
@@ -228,7 +243,7 @@ def initiating_indexing():
 if __name__ == '__main__':
     exists = os.path.isfile('inverted-index.db')
     if exists:
-        for query in ["social services"]:
+        for query in ["sistem SPOT", "social services"]:
             initiating_search(query)
             print()
     else:
