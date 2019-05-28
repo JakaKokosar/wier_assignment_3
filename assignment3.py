@@ -15,11 +15,13 @@ from nltk.corpus import stopwords
 
 logging.getLogger().setLevel(logging.INFO)
 
+
 class DBHandler:
     db_file_name = 'inverted-index.db'
 
     def __init__(self):
         self.connection = sqlite3.connect(self.db_file_name)
+        self.create_table()
 
     def __del__(self):
         """ this is called when an object is garbage collected """
@@ -135,10 +137,9 @@ class BetterThanGoogle:
 
     @staticmethod
     def find_occurrences(word: str, content: str) -> List[str]:
-        return [str(match.start()) for match in re.finditer(word, content)]
+        return [str(match.start()) for match in re.finditer(word, content, re.IGNORECASE)]
 
     def create_index(self, preprocessor=Preprocessor(), db=DBHandler()):
-        db.create_table()
         progress_counter = 0
 
         for file_name, document in self.corpus.items():
@@ -226,10 +227,8 @@ def initiating_indexing():
 
 
 if __name__ == '__main__':
-    exists = os.path.isfile('inverted-index.db')
-    if exists:
-        for query in ["social services"]:
-            initiating_search(query)
-            print()
-    else:
-        initiating_indexing()
+    # initiating_indexing()
+    for query in ["Sistem SPOT"]:
+        initiating_search(query)
+
+
