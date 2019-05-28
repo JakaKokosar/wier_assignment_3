@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import List, Iterable, Dict, Optional
 from html2text import HTML2Text
 from nltk.corpus import stopwords
+from collections import defaultdict
 
 # nltk.download('punkt')
 # nltk.download('stopwords')
@@ -174,17 +175,17 @@ class SearchEngine:
     def perform_query(self, query: str):
         query_words = query.lower().split(" ")
         count = 0
-        results = []
+        results = defaultdict(list)
         for query_word in query_words:
-            query_results = []
             rows = self.db.perform_query("SELECT * FROM Posting WHERE word='%s'" % query_word)
             for row in rows:
+                document = row[1]
                 for result in self._find_occurrences_in_file(row[1], self._to_postings_list(row[3]), query_word):
-                    query_results.append(result)
+                    results[document].append(result)
                     count += 1
-            results.append(QueryResults(query_word, query_results))
-        results.sort(key=lambda x: len(x.results), reverse=True)
-        return QueryResult(count, results)
+        query_results = [item for item in results.items()]
+        query_results.sort(key=lambda x: len(x[1]), reverse=True)
+        return count, query_results
 
     @staticmethod
     def _to_postings_list(postings: str):
@@ -206,15 +207,15 @@ class SearchEngine:
 def initiating_search(query: str):
     engine = SearchEngine(DBHandler())
     start = time.time()
-    result = engine.perform_query(query)
+    count, results = engine.perform_query(query)
     end = time.time()
     print('Searching time: ', end - start)
-    print("Found %d results for \"%s\"" % (result.count, query))
+    print("Found %d results for \"%s\"" % (count, query))
     print()
-    for result_query in result.query_results:
-        print("Found %d results for \"%s\": " % (len(result_query.results), result_query.query))
-        for idx, result in enumerate(result_query.results):
-            print("%d: %s" % (idx, repr(result)))
+    for result_query in results:
+        print("Found %d results in \"%s\": " % (len(result_query[1]), result_query[0]))
+        for idx, result in enumerate(result_query[1]):
+          print(f'{idx}: {repr(result)}')
         print()
 
 
@@ -230,5 +231,3 @@ if __name__ == '__main__':
     # initiating_indexing()
     for query in ["Sistem SPOT"]:
         initiating_search(query)
-
-
