@@ -219,6 +219,27 @@ def initiating_search(query: str):
         print()
 
 
+def sequential_file_reading(query: str):
+    start = time.time()
+    parser = HTML2Text()
+
+    counter = set()
+
+    for path in Path('data/').glob('**/*.html'):
+        content = parser.handle(path.read_text())
+
+        for word in query.lower().split(" "):
+            indexes = BetterThanGoogle.find_occurrences(word, content)
+
+            if indexes:
+                for index in indexes:
+                    counter.add(index)
+
+    end = time.time()
+
+    print(f'found {len(counter)} occurrences in {end-start}')
+
+
 def initiating_indexing():
     start = time.time()
     google = BetterThanGoogle('data/')
