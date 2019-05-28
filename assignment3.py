@@ -215,7 +215,7 @@ def initiating_search(query: str):
     for result_query in results:
         print("Found %d results in \"%s\": " % (len(result_query[1]), result_query[0]))
         for idx, result in enumerate(result_query[1]):
-          print(f'{idx}: {repr(result)}')
+            print(f'{idx}: {repr("".join([i for i in result if i.isalpha() or i == " "]))}')
         print()
 
 
@@ -229,5 +229,5 @@ def initiating_indexing():
 
 if __name__ == '__main__':
     # initiating_indexing()
-    for query in ["Sistem SPOT"]:
+    for query in ["predelovalne dejavnosti", "trgovina", "social services", "poskušaj MJU", "državni oblak", "lahko tudi komisija"]:
         initiating_search(query)
