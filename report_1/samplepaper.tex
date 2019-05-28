@@ -95,4 +95,235 @@ Razred \textit{SearchEngine} kot argument prejme \textit{db\_handler} (preko kat
 
 \subsubsection{Perform\_query}
 Funkcija kot argument prejme niz besed ločenih s presledki. Nato iz teh ustvari seznam besed, ter vsaki besedi velike črke zamenja z malimi. Za vsako se nato naredi poizvedba v bazi iz tabele \textit{Posting} in s funkcijo \textit{\_find\_occurrences\_in\_file} in več zankami ustvari terko \textit{QueryResults(beseda, snippeti pojavitev besede)}. Na koncu funkcija vrne drugo terko s številom pojavitev na prvem mestu in seznamom terk \textit{QueryResults} na drugem.
+
+\subsubsection{Hitrost}
+Vredno je omeniti, da ob samem iskanju za pridobitev snippetov besedila vsakič znova obdelamo datoteke. Posledično so nekatere poizvedbe zelo počasne. Dejstva se zavedamo in menimo, da bi se dalo ravno tukaj bistveno nadgraditi sistem s predhodnim pomnjenjem snippetov.
+
+\section{Rezultati poizvedb}
+
+\subsection{predelovalne dejavnosti}
+\begin{lstlisting}
+Searching time:  22.426688194274902
+Found 6367 results for "predelovalne dejavnosti"
+
+Found 1570 results in "data/evem.gov.si/evem.gov.si.371.html":
+0: '... -  \n  \n  * **C** PREDELOVALNE DEJAVNOSTI\n\n ...'
+1: '... ruge raznovrstne predelovalne dejavnosti\n\n ...'
+2: '... gje nerazvrščene predelovalne dejavnosti\n\n ...'
+3: '...  v industrijskem predelovalnem procesu, gl ...'
+4: '... e iz področja C (Predelovalne dejavnosti)_ ...'
+5: '... e ustrezne šifre dejavnosti /storitve in ...'
+6: '... h za opravljanje dejavnosti.\n\nV iskalnik ...'
+7: '... ih je 645 od 645 dejavnosti\n\nIzpisanih j ...'
+8: '... zpisanih je  od  dejavnosti\n\n  * **A** K ...'
+9: '... h za opravljanje dejavnosti:\n\n· Pridelav ...'
+10: '... h za opravljanje dejavnosti:\n\n· Pridelav ...'
+11: '... h za opravljanje dejavnosti:\n\nPridelava  ...'
+12: '... h za opravljanje dejavnosti:\n\n           ...'
+13: '... h za opravljanje dejavnosti:\n\n           ...'
+14: '... h za opravljanje dejavnosti:\n\n           ...'
+15: '... h za opravljanje dejavnosti:\n\n           ...'
+16: '... h za opravljanje dejavnosti:\n\n           ...'
+17: '... **\n\n###  · Lista dejavnosti, ki se običa ...'
+18: '... obrtni način\n\nZa dejavnosti, ki so uvršč ...'
+19: '... vrščene na Listo dejavnosti, ki se običa ...'
+20: '...  registraciji te dejavnosti poslovni sub ...'
+\end{lstlisting}
+
+\subsection{trgovina}
+\begin{lstlisting}
+Searching time:  5.710252046585083
+Found 1158 results for "trgovina"
+
+Found 368 results in "data/evem.gov.si/evem.gov.si.371.html":
+0: '... .110_\n        * _trgovina na debelo s  ...'
+1: '... .890_\n        * _trgovina na debelo z  ...'
+2: '... .890_\n        * _trgovina na debelo s  ...'
+3: '... .380_\n        * _trgovina na drobno s  ...'
+4: '... alij\n          * Trgovina na debelo z  ...'
+5: '... jami\n          * Trgovina na drobno z  ...'
+6: '... .500_\n        * _trgovina na debelo s  ...'
+7: '... .460_\n        * _trgovina na drobno s  ...'
+8: '... a čiščenje tal v trgovinah in industri ...'
+9: '... .320_\n        * _trgovina (odkup in pr ...'
+10: '... .220_\n        * _trgovina na debelo z  ...'
+11: '... o  \n  \n  * **G** TRGOVINA; VZDRŽEVANJE ...'
+12: '... IL\n\n    * **45** Trgovina z motornimi  ...'
+13: '...     * **45.110** Trgovina z avtomobili ...'
+14: '... da:**\n\n        * trgovina na debelo in ...'
+15: '... :_**\n\n        * _trgovina na debelo al ...'
+16: '...     * **45.190** Trgovina z drugimi mo ...'
+17: '... da:**\n\n        * trgovina na debelo al ...'
+18: '... :_**\n\n        * _trgovina na debelo al ...'
+19: '...     * **45.310** Trgovina na debelo z  ...'
+20: '... da:**\n\n        * trgovina na debelo s  ...'
+\end{lstlisting}
+
+\subsection{social services}
+\begin{lstlisting}
+Searching time:  1.4749388694763184
+Found 12 results for "social services"
+
+Found 5 results in "data/e-uprava.gov.si/e-uprava.gov.si.45.html":
+0: '... retirement\n  * Social services, heal ...'
+1: '... hip etc.?\n\n##  Social services, heal ...'
+2: '... tain financial social assistance? Ho ...'
+3: '... ent\n  * Social services, health, death ...'
+4: '... .?\n\n##  Social services, health, death ...'
+
+Found 5 results in "data/e-uprava.gov.si/e-uprava.gov.si.9.html":
+0: '... retirement\n  * Social services, heal ...'
+1: '... hip etc.?\n\n##  Social services, heal ...'
+2: '... tain financial social assistance? Ho ...'
+3: '... ent\n  * Social services, health, death ...'
+4: '... .?\n\n##  Social services, health, death ...'
+
+Found 1 results in "data/evem.gov.si/evem.gov.si.661.html":
+0: '... ords and Related Services (AJPES) and  ...'
+
+Found 1 results in "data/podatki.gov.si/podatki.gov.si.340.html":
+0: '... creation and spa services ltd.\n\nTERME  ...'
+\end{lstlisting}
+
+\subsection{MJU}
+\begin{lstlisting}
+Searching time:  0.6603918075561523
+Found 28 results for "MJU"
+
+Found 5 results in "data/podatki.gov.si/podatki.gov.si.295.html":
+0: '... 017/18** , ki ga MJU organizira s ...'
+1: '... \n\n![](http://www.mju.gov.si/filea ...'
+2: '... gov.si/fileadmin/mju.gov.si/pageu ...'
+3: '... )\n![](http://www.mju.gov.si/filea ...'
+4: '... gov.si/fileadmin/mju.gov.si/pageu ...'
+
+Found 3 results in "data/podatki.gov.si/podatki.gov.si.351.html":
+0: '... ronska pošta: gp.mju@gov.si, \n    ...'
+1: '... a: ispap-podatki.mju@gov.si\n    * ...'
+2: '... l)\n\nhtml\n\n###### MJU\n\n**Podrobnos ...'
+
+Found 2 results in "data/evem.gov.si/evem.gov.si.68.html":
+0: '... za javno upravo (MJU), ki na podl ...'
+1: '... racija posreduje\nMJU, ki uredi za ...'
+
+Found 2 results in "data/podatki.gov.si/podatki.gov.si.105.html":
+0: '... ronska pošta: gp.mju@gov.si\n    * ...'
+1: '... 1)\n\nhtml\n\n###### MJU\n\n**Podrobnos ...'
+\end{lstlisting}
+
+\subsection{državni oblak}
+\begin{lstlisting}
+Searching time:  42.03738808631897
+Found 3873 results for "državni oblak"
+
+Found 29 results in "data/podatki.gov.si/podatki.gov.si.106.html":
+0: '... \n\nOrganizacija:\n\nDRŽAVNI ZBOR REPUBLI ...'
+1: '... IKE SLOVENIJE\n\n# DRŽAVNI ZBOR REPUBLI ...'
+2: '... jubljene zbirke\n\nDržavni organi\n\nJavn ...'
+3: '... de __78 ogledov\n\nDRŽAVNI ZBOR REPUBLI ...'
+4: '... ranjem ...\n\nXML\n\nDržavni organi\n\nJavn ...'
+5: '... ka __27 ogledov\n\nDRŽAVNI ZBOR REPUBLI ...'
+6: '... ranjem ...\n\nXML\n\nDržavni organi\n\nJavn ...'
+7: '... ra __19 ogledov\n\nDRŽAVNI ZBOR REPUBLI ...'
+8: '... ranjem\n...\n\nXML\n\nDržavni organi\n\nJavn ...'
+9: '... ov __33 ogledov\n\nDRŽAVNI ZBOR REPUBLI ...'
+10: '... edila, ki jih je Državni zbor sprejel ...'
+11: '... ranjem ...\n\nXML\n\nDržavni organi\n\nJavn ...'
+12: '... ra __37 ogledov\n\nDRŽAVNI ZBOR REPUBLI ...'
+13: '... ranjem ...\n\nXML\n\nDržavni organi\n\nJavn ...'
+14: '... ka __22 ogledov\n\nDRŽAVNI ZBOR REPUBLI ...'
+15: '... ranjem ...\n\nXML\n\nDržavni organi\n\nJavn ...'
+16: '... ti __17 ogledov\n\nDRŽAVNI ZBOR REPUBLI ...'
+17: '... aktov, ki jih je\nDržavni zbor sprejel ...'
+18: '... ranjem ...\n\nXML\n\nDržavni organi\n\nJavn ...'
+19: '... ra __16 ogledov\n\nDRŽAVNI ZBOR REPUBLI ...'
+20: '... ranjem ...\n\nXML\n\nDržavni organi\n\nJavn ...'
+\end{lstlisting}
+
+\subsection{lahko tudi komisija}
+\begin{lstlisting}
+Searching time:  38.3415310382843
+Found 2205 results for "lahko tudi komisija"
+
+Found 287 results in "data/evem.gov.si/evem.gov.si.371.html":
+0: '... st na kmetiji se lahko začne izvaja ...'
+1: '... st na kmetiji se lahko začne izvaja ...'
+2: '... bliki Sloveniji, lahko lovijo kot l ...'
+3: '... o.\n\nLovski čuvaj lahko postane poln ...'
+4: '... kolarjenjem** se lahko ukvarja oseb ...'
+5: '... st na kmetiji se lahko začne izvaja ...'
+6: '... st na kmetiji se lahko začne izvaja ...'
+7: '... ev in školjk, ki lahko poteka v obr ...'
+8: '... iški gospodar je lahko vsak polnole ...'
+9: '... ektroribolova je lahko vsak polnole ...'
+10: '... Ribiški čuvaj je lahko vsak polnole ...'
+11: '... škega okoliša je lahko vsak polnole ...'
+12: '... st na kmetiji se lahko začne izvaja ...'
+13: '...  izkoriščanje se lahko podeli tudi  ...'
+14: '... darskih del** je lahko pravna ali f ...'
+15: '... rudarskih del je lahko posameznik,  ...'
+16: '...  izkoriščanje se lahko podeli tudi  ...'
+17: '... darskih del** je lahko pravna ali f ...'
+18: '... rudarskih del je lahko posameznik,  ...'
+19: '...  izkoriščanje se lahko podeli tudi  ...'
+20: '... darskih del** je lahko pravna ali f ...'
+\end{lstlisting}
+
+\subsection{slovenija}
+\begin{lstlisting}
+Found 67 results in "data/podatki.gov.si/podatki.gov.si.340.html":
+0: '... jo d.o.o.\n\nCIPRA-SLOVENIJA Zavod za var ...'
+1: '... LNI KOMITE PIARC SLOVENIJA, giz; v angl ...'
+2: '... ŠKOCJANSKE JAME, Slovenija\n\nPartim, fin ...'
+3: '... \nRADIOTELEVIZIJA SLOVENIJA javni zavod, ...'
+4: '... aciji\n\nREPUBLIKA SLOVENIJA\n\nREPUBLIKA S ...'
+5: '... ENIJA\n\nREPUBLIKA SLOVENIJA, MINISTRSTVO ...'
+6: '... NOSTI\n\nREPUBLIKA SLOVENIJA, MINISTRSTVO ...'
+7: '... ŽELJA\n\nREPUBLIKA SLOVENIJA UPRAVNA ENOT ...'
+8: '... ŠČINA\n\nREPUBLIKA SLOVENIJA UPRAVNA ENOT ...'
+9: '... EŽICE\n\nREPUBLIKA SLOVENIJA UPRAVNA ENOT ...'
+10: '... CELJE\n\nREPUBLIKA SLOVENIJA UPRAVNA ENOT ...'
+11: '... KNICA\n\nREPUBLIKA SLOVENIJA UPRAVNA ENOT ...'
+12: '... OMELJ\n\nREPUBLIKA SLOVENIJA UPRAVNA ENOT ...'
+13: '... MŽALE\n\nREPUBLIKA SLOVENIJA UPRAVNA ENOT ...'
+14: '... OGRAD\n\nREPUBLIKA SLOVENIJA UPRAVNA ENOT ...'
+15: '... DGONA\n\nREPUBLIKA SLOVENIJA UPRAVNA ENOT ...'
+16: '... UPLJE\n\nREPUBLIKA SLOVENIJA UPRAVNA ENOT ...'
+17: '... STNIK\n\nREPUBLIKA SLOVENIJA UPRAVNA ENOT ...'
+18: '... DRIJA\n\nREPUBLIKA SLOVENIJA UPRAVNA ENOT ...'
+19: '... TRICA\n\nREPUBLIKA SLOVENIJA UPRAVNA ENOT ...'
+20: '... IZOLA\n\nREPUBLIKA SLOVENIJA UPRAVNA ENOT ...'
+\end{lstlisting}
+
+\subsection{davki}
+\begin{lstlisting}
+Searching time:  41.975666999816895
+Found 2767 results for "davki"
+
+Found 39 results in "data/evem.gov.si/evem.gov.si.32.html":
+0: '... ega obračuna na eDavkihOstalo\n\n     ...'
+1: '... ega\nobračuna na eDavkihFizične oseb ...'
+2: '... ega obračuna na eDavkihPravne osebe ...'
+3: '... ega obračuna na eDavkihOstalo\n\n     ...'
+4: '... ega\nobračuna na eDavkihFizične oseb ...'
+5: '... ega obračuna na eDavkihPravne osebe ...'
+6: '... ega\nobračuna na eDavkihFizične oseb ...'
+7: '... ega obračuna na eDavkihPravne osebe ...'
+8: '... ega obračuna na eDavkihOstalo\n\n     ...'
+9: '... ega\nobračuna na eDavkihFizične oseb ...'
+10: '... ega obračuna na eDavkihOstalo\n\n     ...'
+11: '... ega\nobračuna na eDavkihFizične oseb ...'
+12: '... ega obračuna na eDavkihPravne osebe ...'
+13: '... ega obračuna na eDavkihOstalo\n\n     ...'
+14: '... ega obračuna na eDavkihPravne osebe ...'
+15: '... ega obračuna na eDavkihOstalo\n\n     ...'
+16: '... ega\nobračuna na eDavkihFizične oseb ...'
+17: '... ega\nobračuna na eDavkihFizične oseb ...'
+18: '... ega\nobračuna na eDavkihPravne osebe ...'
+19: '... ega obračuna na eDavkihPravne osebe ...'
+20: '... ega obračuna na eDavkihFizične oseb ...'
+\end{lstlisting}
+
+
+
 \end{document}
