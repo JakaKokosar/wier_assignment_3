@@ -1782,5 +1782,3 @@ moglo
 moralo 
 smelo 
 zmogl
-tč
-oz
