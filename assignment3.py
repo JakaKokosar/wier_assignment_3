@@ -215,7 +215,7 @@ def initiating_search(query: str):
     for result_query in results:
         print("Found %d results in \"%s\": " % (len(result_query[1]), result_query[0]))
         for idx, result in enumerate(result_query[1]):
-            print(f'{idx}: {repr("".join([i for i in result if i.isalpha() or i == " "]))}')
+            print(f'{idx}: {repr(result)}')
         print()
 
 
